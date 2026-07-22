@@ -14,9 +14,10 @@ int main(){
       write(board,&state);
       judge(board,&state);
       state.turn++;
-    }while();
-  show(board);
-  printf("____終了____")
+    }while(fc>0);
+    printf("____終了____")
+    show(board);
+  
     return 0;
     }
 int show(const int *board[N][N]){
@@ -62,16 +63,27 @@ int write(int board[N][N],Info *s){
   }
 }
 int judge(int board[N][N]、Info *s){
-  int c;
+  int cx,cy,cxy;
+  x=s->x;
+  y=s->y;
+  int x_cp,y_cp;
+  x_cp=x;
+  y_cp=y;
   for(x=0;x<N;x++){
-    for(y=0;y<N;y++){
-      c=c+board[x][y];
-    
-      
+        for(y=0;y<N;y++){
+              cx=c+board[x_cp][y];
+              cy=c+board[x][y_cp];
+              cxy=c+board[x][y];
+        }
   }
-    
-    if(board[x][y]==r){
-        
-    }
-  
+int c,v,fc;
+      c=cx+100×cy+10000×cxy;
+      v=3;
+      fc=0;
+   switch(c){
+      case v:fc++; break;
+      case 100×v:fc++; break;
+      case 10000×v:fc++; break;
+   }
+      return fc;
 }

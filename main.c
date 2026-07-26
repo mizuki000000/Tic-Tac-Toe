@@ -1,4 +1,4 @@
-  #include<stdio.h>
+#include<stdio.h>
 typedef struct{
       int x;
       int y;
@@ -7,7 +7,7 @@ typedef struct{
 #define N 3
 int main(){
     int board[N][N]={0};
-    Info state= {0,0,1}
+    Info state= {0,0,1};
     do{
       show(board);
       input(&state);
@@ -15,7 +15,7 @@ int main(){
       judge(board,&state);
       state.turn++;
     }while(fc>0);
-    printf("____終了____")
+    printf("____終了____");
     show(board);
   
     return 0;
@@ -39,7 +39,7 @@ int show(const int *board[N][N]){
 }
 int input(Info *s){
   char c;
-  printf("wasdで入力、eで決定")
+  printf("wasdで入力、eで決定");
   do{
     scanf("%c",&c);
     switch(input){

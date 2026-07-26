@@ -1,4 +1,4 @@
-#include<stdio.h>
+  #include<stdio.h>
 typedef struct{
       int x;
       int y;
@@ -62,7 +62,7 @@ int write(int board[N][N],Info *s){
      board[x][y]=2;
   }
 }
-int judge(int board[N][N]、Info *s){
+int judge(int board[N][N],Info *s){
   int cx,cy,cxy;
   x=s->x;
   y=s->y;
@@ -77,13 +77,13 @@ int judge(int board[N][N]、Info *s){
         }
   }
 int c,v,fc;
-      c=cx+100×cy+10000×cxy;
+      c=cx+100*cy+10000*cxy;
       v=3;
       fc=0;
    switch(c){
       case v:fc++; break;
-      case 100×v:fc++; break;
-      case 10000×v:fc++; break;
+      case 100*v:fc++; break;
+      case 10000*v:fc++; break;
    }
       return fc;
 }

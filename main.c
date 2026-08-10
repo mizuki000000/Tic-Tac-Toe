@@ -12,22 +12,23 @@ int write(int board[N][N],Info *s);
 int judge(int board[N][N],Info *s);
 int main(){
   printf("start\n");
-    int board[N][N]={0};
-    Info state= {0,0,1};
-    int fc=0;
-    do{
-      printf("show_s\n");
-      show(board);
-      printf("input_s\n");
-      input(&state);
-      printf("write_s\n");
-      write(board,&state);
-      printf("judge_s\n");
-      judge(board,&state);
-      state.turn++;
-    }while(fc>0);
-    printf("____終了____\n");
+  int board[N][N]={0};
+  Info state= {0,0,1};
+  int fc=0;
+  do{
+    printf("show_s\n");
     show(board);
+    printf("input_s\n");
+    input(&state);
+    printf("write_s\n");
+    write(board,&state);
+    printf("judge_s\n");
+    judge(board,&state);
+    state.turn++;
+    printf("%d", fc);
+  }while(fc==0);
+  printf("____終了____\n");
+  show(board);
   
     return 0;
     }
@@ -56,14 +57,14 @@ int input(Info *s){
   do{
     scanf("%c",&c);
     switch(c){
-      case 'w':s->y++;break;
+      case 'w':s->y++; break;
       case 's':s->y--; break;
       case 'a':s->x++; break;
       case 'd':s->x--; break;
     }
   }while(c!='e');
-  s->y=s->y/N;
-  s->x=s->x/N;
+  s->y=s->y%N;
+  s->x=s->x%N;
   return 0;
 }
 int write(int board[N][N],Info *s){
@@ -101,4 +102,3 @@ int c,fc;
    }
       return fc;
 }
-

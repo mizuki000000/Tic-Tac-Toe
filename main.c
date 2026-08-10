@@ -5,9 +5,15 @@ typedef struct{
       int turn;
     }Info;
 #define N 3
+#define V 3
+int show(const int board[N][N]);
+int input(Info *s);
+int write(int board[N][N],Info *s);
+int judge(int board[N][N],Info *s);
 int main(){
     int board[N][N]={0};
     Info state= {0,0,1};
+    int fc=0;
     do{
       show(board);
       input(&state);
@@ -20,7 +26,7 @@ int main(){
   
     return 0;
     }
-int show(const int *board[N][N]){
+int show(const int board[N][N]){
   int i,j;
   for(i=0;i<N;i++){
     for(j=0;j<N;j++){
@@ -42,20 +48,20 @@ int input(Info *s){
   printf("wasdで入力、eで決定");
   do{
     scanf("%c",&c);
-    switch(input){
-      case 'w':s->(*y)++; break;
-      case 's':s->(*y)--; break;
-      case 'a':s->(*x)++; break;
-      case 'd':s->(*x)--; break;
+    switch(c){
+      case 'w':s->y++; break;
+      case 's':s->y--; break;
+      case 'a':s->x++; break;
+      case 'd':s->x--; break;
     }
-  }while(input!='e');
+  }while(c!='e');
   return 0;
 }
 int write(int board[N][N],Info *s){
-  t=s->turn;
-  x=s->x;
-  y=s->y;
-  player=t%2;
+  int t=s->turn;
+  int x=s->x;
+  int y=s->y;
+  int player=t%2;
   if(player==1){
      board[x][y]=1;
   }else{
@@ -64,26 +70,25 @@ int write(int board[N][N],Info *s){
 }
 int judge(int board[N][N],Info *s){
   int cx,cy,cxy;
-  x=s->x;
-  y=s->y;
+  cx=s->x;
+  cy=s->y;
   int x_cp,y_cp;
-  x_cp=x;
-  y_cp=y;
-  for(x=0;x<N;x++){
-        for(y=0;y<N;y++){
-              cx=c+board[x_cp][y];
-              cy=c+board[x][y_cp];
-              cxy=c+board[x][y];
+  x_cp=cx;
+  y_cp=cy;
+  for(cx=0;cx<N;cx++){
+        for(cy=0;cy<N;cy++){
+              cx=cx+board[x_cp][cy];
+              cy=cy+board[cx][y_cp];
+              cxy=cxy+board[cx][cy];
         }
   }
-int c,v,fc;
+int c,fc;
       c=cx+100*cy+10000*cxy;
-      v=3;
       fc=0;
    switch(c){
-      case v:fc++; break;
-      case 100*v:fc++; break;
-      case 10000*v:fc++; break;
+      case V:fc++; break;
+      case 100*V:fc++; break;
+      case 10000*V:fc++; break;
    }
       return fc;
 }

@@ -7,7 +7,7 @@ typedef struct{
 #define N 3
 #define V 3
 int show(const int board[N][N]);
-int input(Info *s);
+int input(const int board[N][N],Info *s);
 int write(int board[N][N],Info *s);
 int judge(int board[N][N],Info *s);
 int main(){
@@ -19,17 +19,17 @@ int main(){
   do{
     state.x = 0;
     state.y = 0;  
-    printf("show_s\n");
+    //printf("show_s\n");
     show(board);
-    printf("input_s\n");
-    input(&state);
-    printf("write_s\n");
+    //printf("input_s\n");
+    input(board,&state);
+    //printf("write_s\n");
     write(board,&state);
-    printf("judge_s\n");
-    printf("%d%d\n", state.x, state.y);
+    //printf("judge_s\n");
+    printf("%d,%d\n", state.x, state.y);
     judge(board,&state);
     state.turn++;
-    printf("%d", fc);
+    printf("%d\n", fc);
   }while(fc==0);
   printf("____終了____\n");
   show(board);
@@ -55,7 +55,7 @@ int show(const int board[N][N]){
   }
   return 0;
 }
-int input(Info *s){
+int input(const int board[N][N],Info *s){
   char c;
   printf("wasdで入力、eで決定");
   do{
@@ -74,6 +74,10 @@ int input(Info *s){
   }
   if(s->y<0){
     s->y+=N;
+  }
+  if(board[s->x][s->y]!=0){
+    printf("その枠は埋まっています");
+    input(board,s);
   }
   return 0;
 }

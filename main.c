@@ -1,8 +1,12 @@
 #include<stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <ctype.h>
 typedef struct{
       int x;
       int y;
       int turn;
+      int menber;
     }Info;
 #define N 3
 #define V 3
@@ -11,11 +15,21 @@ int input(const int board[N][N],Info *s);
 int write(int board[N][N],Info *s);
 int judge(int board[N][N],Info *s);
 int main(){
-  printf("start\n");
+  int menber;
+  int fc=0;
   int board[N][N]={0};
   Info state= {0,0,1};
-  int fc=0;
-  
+  do{
+    printf("1:1人、2:2人で遊ぶ\n 入力\n");
+    scanf("%d",&state.menber);
+    if (state.menber != 1 && state.menber != 2){
+      printf("入力に失敗しました。\n");
+        while (getchar() != '\n');
+        state.menber = 0;
+        continue;
+    }
+  }while(state.menber != 1 && state.menber != 2);
+ 
   do{
     state.x = 0;
     state.y = 0;  
@@ -26,10 +40,10 @@ int main(){
     //printf("write_s\n");
     write(board,&state);
     //printf("judge_s\n");
-    printf("%d,%d\n", state.x, state.y);
+    printf("player:%d,%d\n", state.x, state.y);
     judge(board,&state);
     state.turn++;
-    printf("%d\n", fc);
+    printf("結果確認：%d\n", fc);
   }while(fc==0);
   printf("____終了____\n");
   show(board);
@@ -57,27 +71,41 @@ int show(const int board[N][N]){
 }
 int input(const int board[N][N],Info *s){
   char c;
-  printf("wasdで入力、eで決定");
-  do{
-    scanf("%c",&c);
-    switch(c){
-      case 'w':s->y--; break;
-      case 's':s->y++; break;
-      case 'a':s->x--; break;
-      case 'd':s->x++; break;
+  int turn=s->turn%2;
+  printf("pleyer%d人",s->menber);
+  if((s->menber==1)&&(turn==0)){
+    int x,y;
+    do{
+    x=rand()%N;
+    y=rand()%N;
+    }while (board[s->y][s->x]==0);
+    s->x=x;
+    s->y=y;
+    printf("CPU:%d,%d",x,y);
+  }else{
+    printf("wasdで入力、eで決定\n");
+    do{
+      scanf("%c",&c);
+      switch(c){
+        case 'w':s->y--; break;
+        case 's':s->y++; break;
+        case 'a':s->x--; break;
+        case 'd':s->x++; break;
+      }
+      s->y=s->y%N;
+      s->x=s->x%N;
+    }while(c!='e');
+    
+    if(s->x<0){
+      s->x+=N;
     }
-  }while(c!='e');
-  s->y=s->y%N;
-  s->x=s->x%N;
-  if(s->x<0){
-    s->x+=N;
-  }
-  if(s->y<0){
-    s->y+=N;
-  }
-  if(board[s->x][s->y]!=0){
-    printf("その枠は埋まっています");
-    input(board,s);
+    if(s->y<0){
+      s->y+=N;
+    }
+    if(board[s->y][s->x]!=0){
+      printf("その枠は埋まっています\n");
+      input(board,s);
+    }
   }
   return 0;
 }

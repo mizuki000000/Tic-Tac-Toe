@@ -3,27 +3,29 @@
 #include <time.h>
 #include <ctype.h>
 
-#define N 3
+#define N 5//盤面数
+#define K 3//コマ数
 #define V 3
 #define total_players 2
 
 typedef struct{
-      int x;
-      int y;
-      int turn;
-      int menber;
-      int current_turn;
-      int count_1[3*N];
-      int count_2[3*N];
-    }Info;
-int show(const int board[N][N]);
-int input(const int board[N][N],Info *s);
-int write(int board[N][N],const Info *s);
-int judge(int board[N][N],Info *s);
+  int x;
+  int y;
+  int turn;
+  int menber;
+  int current_turn;
+  int count_1[3*K];
+  int count_2[3*K];
+  int shape[K][2];
+}Info;
+void show(const int board[N][N]);
+void input(const int board[N][N],Info *s);
+void write(int board[N][N],const Info *s);
+int judge(const int board[N][N],Info *s);
+void random_xy(const int board[N][N],Info *s);
 int main(){
   //設定
-  int menber;
-  int fc=0;
+  int menber,i,fc=0;
   int board[N][N]={0};
   Info state= {0};
   srand(time(NULL));
@@ -33,11 +35,18 @@ int main(){
     scanf("%d",&state.menber);
     if (state.menber != 1 && state.menber != 2&& state.menber != 3){
       printf("入力に失敗しました。\n");
-        while (getchar() != '\n');
+      while (getchar() != '\n');
         state.menber = 0;
         continue;
     }
   }while(state.menber != 1 && state.menber != 2&& state.menber != 3);
+  //形指定
+  for(i=0;i<K;i++){
+    random_xy(board,&state);
+    state.shape[i][0]=state.x;
+    state.shape[i][1]=state.y;
+    printf("i=%d,x=%d,y=%d",i,state.x,state.y);
+  }
   //メインループ
   do{
     state.x = 0;
@@ -63,12 +72,13 @@ int main(){
   printf("____終了____\n");
     show(board);
     switch(fc){
-      case -1:printf("draw");
-    
+      case -1:printf("draw");break;
+      case 1:printf("player1 win");break;
+      case 2:printf("player2 win");break;
     }
     return 0;
     }
-int show(const int board[N][N]){
+void show(const int board[N][N]){
   int i,j;
   printf("現在の盤面:\n");
   for(i=0;i<N;i++){
@@ -86,37 +96,20 @@ int show(const int board[N][N]){
     }
     printf("\n");
   }
-  return 0;
 }
-int input(const int board[N][N],Info *s){
+void input(const int board[N][N],Info *s){
   char c;
   s->x = 0;
   s->y = 0; 
   printf("pleyer%d人",s->menber);
   if((s->menber==1)&&(s->current_turn==0)){
     printf("CPU:\n");
-    int x,y;
-    do{
-      x=rand()%N;
-      y=rand()%N;
-      //printf("CPU_think:%d,%d\n",x,y);
-      //printf("board_check:%d\n",board[y][x]);
-    }while (board[y][x]!=0);
-    s->x=x;
-    s->y=y;
-    printf("CPU_select:%d,%d\n",x,y);
+    random_xy(board,s);
+    printf("CPU_select:%d,%d\n",s->x,s->y);
   }else if(s->menber==3){
-      printf("CPU:\n");
-    int x,y;
-    do{
-      x=rand()%N;
-      y=rand()%N;
-      //printf("CPU_think:%d,%d\n",x,y);
-      //printf("board_check:%d\n",board[y][x]);
-    }while (board[y][x]!=0);
-    s->x=x;
-    s->y=y;
-    printf("CPU_select:%d,%d\n",x,y);
+    printf("CPU:\n");
+    random_xy(board,s);
+    printf("CPU_select:%d,%d\n",s->x,s->y);
   }else{
     printf("wasdで入力、eで決定\n");
     do{
@@ -143,14 +136,14 @@ int input(const int board[N][N],Info *s){
     }
   }
 }
-int write(int board[N][N],const Info *s){
+void write(int board[N][N],const Info *s){
   if(s->current_turn==1){
      board[s->y][s->x]=1;
   }else{
      board[s->y][s->x]=2;
   }
 }
-int judge(int board[N][N],Info *s){
+int judge(const int board[N][N],Info *s){
   int fc=0,i=0,j=0;
   int m;
   if(s->turn>=N*N-1){
@@ -163,31 +156,39 @@ int judge(int board[N][N],Info *s){
         case 2:s->count_2[i]++;break;
       }
       switch(board[j][i]){
-        case 1:s->count_1[i+N]++;break;
-        case 2:s->count_2[i+N]++;break;
+        case 1:s->count_1[i+K]++;break;
+        case 2:s->count_2[i+K]++;break;
       }
-    
-       //printf("p1_count:%d,",s->count_1[i]);
-       //printf("p2_count:%d,",s->count_2[i]);
     }   
     switch(board[i][i]){
-      case 1:s->count_1[2*N]++;break;
-      case 2:s->count_2[2*N]++;break;
+      case 1:s->count_1[2*K]++;break;
+      case 2:s->count_2[2*K]++;break;
     }
        switch(board[i][N-1-i]){
-      case 1:s->count_1[1+2*N]++;break;
-      case 2:s->count_2[1+2*N]++;break;
+      case 1:s->count_1[1+2*K]++;break;
+      case 2:s->count_2[1+2*K]++;break;
     }
   }
   for(i=0;i<N*N;i++){
-    if(s->count_1[i]==N){
+    if(s->count_1[i]==K){
       fc=1;
     }
-    if(s->count_2[i]==N){
+    if(s->count_2[i]==K){
       fc=2;
     }
     s->count_1[i]=0;
     s->count_2[i]=0;
   }
   return fc;
+}
+void random_xy(const int board[N][N],Info *s){
+  int x,y;
+  do{
+    x=rand()%N;
+    y=rand()%N;
+    //printf("think:%d,%d\n",x,y);
+    //printf("board_check:%d\n",board[y][x]);
+  }while (board[y][x]!=0);
+  s->x=x;
+  s->y=y;
 }

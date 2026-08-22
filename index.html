@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Tic Tac Toe</title>
+    <style>
+        #board {
+            display: grid;
+            gap: 2px;
+        }
+
+        .cell {
+            width: 60px;
+            height: 60px;
+            font-size: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div id="board"></div>
+    <script>
+        const N = 5;
+        console.log("ohayou");
+        const board = document.getElementById("board");
+        board.style.gridTemplateColumns = `repeat(${N}, 60px)`;
+        board.style.gridTemplateRows = `repeat(${N}, 60px)`;
+
+        for (let y = 0; y < N; y++) {
+            for (let x = 0; x < N; x++) {
+
+                const cell = document.createElement("button");
+
+                cell.classList.add("cell");
+
+                cell.addEventListener("click", () => {
+                    cell.textContent = "●";
+                    console.log("x:", x, "y:", y);
+                    });
+
+                board.appendChild(cell);
+            }
+        }
+    </script>
+</body>
+</html> 

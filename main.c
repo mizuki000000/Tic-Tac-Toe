@@ -3,8 +3,8 @@
 #include <time.h>
 #include <ctype.h>
 
-#define N 3
-#define V 3
+#define N 3//盤面数
+#define V 3//つなげる数
 #define total_players 2
 
 typedef struct{
